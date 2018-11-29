@@ -9,6 +9,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 import static java.time.LocalDate.now;
@@ -40,13 +42,33 @@ public class FormularController {
     }
     private boolean isJmbgValidan(String s) {
         if(s.length() != 13) return false;
-       /* String datumIzJmbga = "";
+        int A = s.charAt(0), B = s.charAt(1), V = s.charAt(2), G = s.charAt(3),
+                D = s.charAt(4), Dj = s.charAt(5), E = s.charAt(6),
+                Z1 = s.charAt(7), Z = s.charAt(8), I = s.charAt(9),
+                J = s.charAt(10), K = s.charAt(11);
+        int L = 11 - ((7*(A+E) + 6*(B+Z1) + 5*(V+Z)+ 4*(G+I) + 3*(D+J) + 2*(Dj+K)) % 11);
+        if(L > 9) L = 0;
+        if(L == K) return true;
+        return true;
+
+
+      /*  SimpleDateFormat formatDatuma = new SimpleDateFormat("dd.mm.yyyy");
+        String formatString = formatDatuma.format(formatDatuma);
+        LocalDate d = datum.getValue().parse(formatString);
+        String dat = d.toString().trim();
+        if(dat.charAt(4) < '3') dat.
+        return dat.equals(s.substring(0,6));
+        for(int i = 0; i < dat.length(); i++)
+            if(dat.indexOf(i) != s.indexOf(i)) return false;
+        return true;
+       String datumIzJmbga = "";
         datumIzJmbga.concat(s.substring(0, 3));
         if(s.charAt(4) < '3') datumIzJmbga += "1";
         else datumIzJmbga += "2";
         datumIzJmbga.concat(s.substring(4, 7));
-        return datum.getValue().toString().equals(datumIzJmbga);*/
-       return true;
+        return datum.getValue().toString().equals(datumIzJmbga);
+        */
+
     }
 
     public boolean isDatumValidan(DatePicker d) {
@@ -60,10 +82,12 @@ public class FormularController {
     }
 
     public boolean isEmailValidan(String s) {
-        return s.contains("@");
+        if(s.contains("@") && (s.indexOf("@") == 0 || s.indexOf("@") == s.length()-1)) return false;
+        int brojac = 0;
+        for(int i = 0; i < s.length(); i++)
+            if(s.charAt(i) == '@') brojac++;
+        return brojac > 0;
     }
-
-
 
     @FXML
     public void initialize() {
