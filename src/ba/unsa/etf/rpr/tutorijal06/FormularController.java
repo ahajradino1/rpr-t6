@@ -8,10 +8,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import java.awt.*;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Date;
+import java.time.YearMonth;
+
 
 import static java.time.LocalDate.now;
 
@@ -42,33 +40,30 @@ public class FormularController {
     }
     private boolean isJmbgValidan(String s) {
         if(s.length() != 13) return false;
-        int A = s.charAt(0), B = s.charAt(1), V = s.charAt(2), G = s.charAt(3),
-                D = s.charAt(4), Dj = s.charAt(5), E = s.charAt(6),
-                Z1 = s.charAt(7), Z = s.charAt(8), I = s.charAt(9),
-                J = s.charAt(10), K = s.charAt(11);
-        int L = 11 - ((7*(A+E) + 6*(B+Z1) + 5*(V+Z)+ 4*(G+I) + 3*(D+J) + 2*(Dj+K)) % 11);
-        if(L > 9) L = 0;
-        if(L == K) return true;
+        int dd = Integer.parseInt( s.substring(0,2) );
+        int mm = Integer.parseInt( s.substring(2,4) );
+        int ggg = Integer.parseInt( s.substring(4,7) );
+
+        if( dd < 1 || dd > YearMonth.of(ggg, mm).lengthOfMonth() )
+            return false;
+
+        if(mm>12 || mm<0)
+            return false;
+
+        if(ggg>18 && ggg<0)
+            return false;
+        int k = Integer.parseInt(s.substring(12, 13));
+        int l = 11 - ((7*(Integer.parseInt(jmbgField.getText(0,1)) + Integer.parseInt(jmbgField.getText(6,7))) +
+                6*(Integer.parseInt(jmbgField.getText(1,2)) + Integer.parseInt(jmbgField.getText(7,8))) +
+                5*(Integer.parseInt(jmbgField.getText(2,3)) + Integer.parseInt(jmbgField.getText(8,9))) +
+                4*(Integer.parseInt(jmbgField.getText(3,4)) + Integer.parseInt(jmbgField.getText(9,10))) +
+                3*(Integer.parseInt(jmbgField.getText(4,5)) + Integer.parseInt(jmbgField.getText(10,11))) +
+                2*(Integer.parseInt(jmbgField.getText(5,6)) + Integer.parseInt(jmbgField.getText(11,12)))) % 11);
+        if(l>=1 && l<=9 && l!=k)
+            return false;
+        if(l>9 && k!=0)
+            return false;
         return true;
-
-
-      /*  SimpleDateFormat formatDatuma = new SimpleDateFormat("dd.mm.yyyy");
-        String formatString = formatDatuma.format(formatDatuma);
-        LocalDate d = datum.getValue().parse(formatString);
-        String dat = d.toString().trim();
-        if(dat.charAt(4) < '3') dat.
-        return dat.equals(s.substring(0,6));
-        for(int i = 0; i < dat.length(); i++)
-            if(dat.indexOf(i) != s.indexOf(i)) return false;
-        return true;
-       String datumIzJmbga = "";
-        datumIzJmbga.concat(s.substring(0, 3));
-        if(s.charAt(4) < '3') datumIzJmbga += "1";
-        else datumIzJmbga += "2";
-        datumIzJmbga.concat(s.substring(4, 7));
-        return datum.getValue().toString().equals(datumIzJmbga);
-        */
-
     }
 
     public boolean isDatumValidan(DatePicker d) {
